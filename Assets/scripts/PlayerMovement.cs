@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f;
     public float jumpForce = 5f;
+    public float Hp = 2;
 
     private Rigidbody2D rb;
     [SerializeField] private bool isGrounded;
@@ -30,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Enamy"))
         {
             Destroy(this.gameObject);
+            Hp--;
+            Debug.Log(Hp);
         }
     }
 

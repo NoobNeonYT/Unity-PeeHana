@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
@@ -7,6 +5,11 @@ public class Coin : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
-        { Destroy(this.gameObject); }
+        {
+            PointManager.Point += 10;
+            Debug.Log($"I Gay {PointManager.Point}");
+            Destroy(this.gameObject); 
+        }
+       
     }
 }
