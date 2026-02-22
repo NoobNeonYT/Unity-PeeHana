@@ -16,6 +16,11 @@ public class PlayerMovement : MonoBehaviour
         rb = this.gameObject.GetComponent<Rigidbody2D>();
     }
 
+    private void FixedUpdate()
+    {
+        
+    }
+
     private void Update()
     {
         float move = Input.GetAxis("Horizontal");
