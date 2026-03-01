@@ -39,7 +39,7 @@ public class PlayerCol : MonoBehaviour
     private void FixedUpdate()
     {
         float move = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(move * speed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(move * speed, rb.linearVelocity.y);
         if (facingRight == false && inputHorizontal > 0)
         {
             Flib();
@@ -65,7 +65,7 @@ public class PlayerCol : MonoBehaviour
         if (isGrounded==true)
         {
             extraJump = extraJumpValue;
-            if(rb.velocity.y == 0)
+            if(rb.linearVelocity.y == 0)
             {
                 isJumping = false;
             }
@@ -74,20 +74,20 @@ public class PlayerCol : MonoBehaviour
         {
             isJumping = true;
             jumpTimeCounter = jumpTime;
-            rb.velocity = Vector2.up * jumpForce;
+            rb.linearVelocity = Vector2.up * jumpForce;
             extraJump--;
         }
         else if (Input.GetKeyDown(KeyCode.Space) && extraJump == 0 && isGrounded == true)
         {
             isGrounded = true;
             jumpTimeCounter = jumpTime;
-            rb.velocity = Vector2.up * jumpForce;
+            rb.linearVelocity = Vector2.up * jumpForce;
         }
         if (Input.GetKeyDown(KeyCode.Space) && isJumping)
         {
             if (jumpTimeCounter > 0)
             {
-                rb.velocity = Vector2.up * jumpForce;
+                rb.linearVelocity = Vector2.up * jumpForce;
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
