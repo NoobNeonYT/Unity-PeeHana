@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
+
 public class PlayerCol : MonoBehaviour
 {
     [Header("Movement")]
@@ -27,7 +28,9 @@ public class PlayerCol : MonoBehaviour
     public float checkRadius;
     public LayerMask whatIsGround;
     private bool isGrounded;
-
+    [Header("Effect")]
+    public Animator camAnimator;
+    bool spawnDust = false;
 
 
     // Start is called before the first frame update
@@ -64,6 +67,11 @@ public class PlayerCol : MonoBehaviour
     {
         if (isGrounded==true)
         {
+            if (spawnDust == true)
+            {
+                camAnimator.SetTrigger("Shake");
+                spawnDust = false;
+            }
             extraJump = extraJumpValue;
             if(rb.linearVelocity.y == 0)
             {
