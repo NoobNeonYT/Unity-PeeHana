@@ -32,6 +32,9 @@ public class PlayerCol : MonoBehaviour
     [Header("Animation")]
     public Animator playerAnimator;
 
+    public Transform bodyImg;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -125,8 +128,8 @@ public class PlayerCol : MonoBehaviour
     void Flib()
     {
         facingRight = !facingRight;
-        Vector3 Scaler = transform.localScale;
+        Vector3 Scaler = bodyImg.localScale;
         Scaler.x *= -1;
-        transform.localScale = Scaler;
+        bodyImg.localScale = Scaler;
     }
 }
