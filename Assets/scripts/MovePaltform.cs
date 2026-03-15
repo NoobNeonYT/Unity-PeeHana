@@ -26,7 +26,7 @@ public class SplashX_MovingPlatform : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // ถ้าสิ่งที่มาชนมี Tag ว่า Player (น้องเคียว)
+
         if (collision.gameObject.CompareTag("Player"))
         {
             collision.transform.SetParent(this.transform);
