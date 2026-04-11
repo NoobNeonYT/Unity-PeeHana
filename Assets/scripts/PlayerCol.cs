@@ -34,10 +34,19 @@ public class PlayerCol : MonoBehaviour
 
     public Transform bodyImg;
 
+    // --- ส่วนที่เพิ่มเข้ามาสำหรับบันได ---
+    [Header("Ladder")]
+    public float climbSpeed = 5f;
+    private bool isAtLadder;
+    private bool isClimbing;
+    private float defaultGravity;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        // --- เก็บค่า Gravity เริ่มต้นของตัวละครไว้ ---
+        defaultGravity = rb.gravityScale;
     }
 
     private void FixedUpdate()
@@ -59,6 +68,18 @@ public class PlayerCol : MonoBehaviour
 
         if (facingRight == false && move > 0) Flib();
         else if (facingRight == true && move < 0) Flib();
+
+        // --- ระบบฟิสิกส์ตอนปีนบันได ---
+        if (isClimbing)
+        {
+            float verticalMove = Input.GetAxis("Vertical");
+            rb.gravityScale = 0f; // ปิดแรงโน้มถ่วงไม่ให้ร่วง
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, verticalMove * climbSpeed); // บังคับขึ้นลง
+        }
+        else
+        {
+            rb.gravityScale = defaultGravity; // ถ้าไม่ได้ปีน คืนค่าแรงโน้มถ่วงปกติ
+        }
     }
 
     void Update()
@@ -93,7 +114,16 @@ public class PlayerCol : MonoBehaviour
 
     void PlayerInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        // --- เช็คว่ากดปุ่มขึ้น/ลง ตรงบันไดหรือเปล่า ---
+        float verticalInput = Input.GetAxis("Vertical");
+        if (isAtLadder && Mathf.Abs(verticalInput) > 0f)
+        {
+            isClimbing = true;
+            isJumping = false; // ยกเลิกการกระโดดตอนเริ่มปีน
+        }
+
+        // เพิ่มเงื่อนไข !isClimbing เข้าไป เพื่อไม่ให้กดกระโดดได้ตอนกำลังเกาะบันไดอยู่
+        if (Input.GetKeyDown(KeyCode.Space) && !isClimbing)
         {
             if (extraJump > 0 || isGrounded == true)
             {
@@ -131,5 +161,24 @@ public class PlayerCol : MonoBehaviour
         Vector3 Scaler = bodyImg.localScale;
         Scaler.x *= -1;
         bodyImg.localScale = Scaler;
+    }
+
+    // --- ตรวจจับว่าเดินชนบันได (Trigger) หรือยัง ---
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+        {
+            isAtLadder = true;
+        }
+    }
+
+    // --- ตรวจจับว่าเดินออกจากบันไดหรือยัง ---
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+        {
+            isAtLadder = false;
+            isClimbing = false;
+        }
     }
 }
